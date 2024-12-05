@@ -1,0 +1,19 @@
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+
+@app.route('/classify', methods=['POST'])
+def classify_url():
+    data = request.json
+    url = data.get('url')
+    
+    # Vectorize the URL
+    url_vectorized = vectorizer.transform([url])
+    
+    # Predict
+    prediction = model.predict(url_vectorized)
+    result = "Phishing" if prediction[0] == 1 else "Legitimate"
+    return jsonify({"url": url, "classification": result})
+
+if __name__ == '__main__':
+    app.run(debug=True)
